@@ -5,7 +5,6 @@ A simple educational tool to help understand the Pythagorean theorem: a² + b² 
 """
 
 import math
-import sys
 
 
 class PythagoreanSimulator:

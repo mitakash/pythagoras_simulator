@@ -4,10 +4,16 @@ Visual Pythagorean Theorem Simulator
 Creates visual representations of right triangles and the Pythagorean theorem
 """
 
+import os
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
 from pythagoras_simulator import PythagoreanSimulator
+
+
+def _has_display():
+    """Check if display is available"""
+    return os.environ.get('DISPLAY') or os.name == 'nt'
 
 
 class VisualPythagoreanSimulator(PythagoreanSimulator):
@@ -112,7 +118,11 @@ class VisualPythagoreanSimulator(PythagoreanSimulator):
             plt.savefig(save_file, dpi=150, bbox_inches='tight')
             print(f"Visualization saved to {save_file}")
         
-        plt.show()
+        # Only show if display is available
+        if _has_display():
+            plt.show()
+        else:
+            plt.close(fig)
         
         return fig, ax
     
@@ -189,7 +199,11 @@ class VisualPythagoreanSimulator(PythagoreanSimulator):
             plt.savefig(save_file, dpi=150, bbox_inches='tight')
             print(f"Proof visualization saved to {save_file}")
         
-        plt.show()
+        # Only show if display is available
+        if _has_display():
+            plt.show()
+        else:
+            plt.close(fig)
         
         return fig, (ax1, ax2)
 
