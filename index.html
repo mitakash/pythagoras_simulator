@@ -39,6 +39,31 @@
         input[type="range"] {
             width: 300px;
             vertical-align: middle;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #ddd;
+            outline: none;
+            border-radius: 5px;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #2196F3;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            background: #2196F3;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
         }
         
         .value-display {
@@ -145,6 +170,102 @@
             margin: 20px 0;
             color: #1976D2;
         }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 1200px) {
+            .visualization-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .config {
+                width: 100%;
+                max-width: 600px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 24px;
+                margin: 15px 0;
+            }
+            
+            .controls {
+                padding: 15px;
+            }
+            
+            .slider-container {
+                margin: 10px 0;
+            }
+            
+            .slider-container label {
+                display: block;
+                width: 100%;
+                margin-bottom: 5px;
+            }
+            
+            input[type="range"] {
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .config {
+                padding: 15px;
+            }
+            
+            .config h2 {
+                font-size: 20px;
+            }
+            
+            svg {
+                width: 100%;
+                height: auto;
+            }
+            
+            .explanation {
+                font-size: 14px;
+                padding: 12px;
+            }
+            
+            .formula {
+                font-size: 18px;
+                padding: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+            
+            .config h2 {
+                font-size: 18px;
+            }
+            
+            .slider-container label {
+                font-size: 14px;
+            }
+            
+            .value-display {
+                font-size: 16px;
+            }
+            
+            .explanation {
+                font-size: 13px;
+            }
+            
+            .explanation h3 {
+                font-size: 16px;
+            }
+            
+            .formula {
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -171,7 +292,7 @@
     <div class="visualization-container">
         <div class="config">
             <h2>Configuration 1: One Square (c²)</h2>
-            <svg id="config1" width="750" height="750"></svg>
+            <svg id="config1" viewBox="0 0 750 750" style="max-width: 750px; width: 100%; height: auto;"></svg>
             <div class="explanation">
                 <h3>What's happening here?</h3>
                 <p>We took 4 identical right triangles (the yellow ones with sides <strong>a</strong>, <strong>b</strong>, and <strong>c</strong>) and arranged them inside a big square.</p>
@@ -183,7 +304,7 @@
         
         <div class="config">
             <h2>Configuration 2: Two Squares (a² + b²)</h2>
-            <svg id="config2" width="750" height="750"></svg>
+            <svg id="config2" viewBox="0 0 750 750" style="max-width: 750px; width: 100%; height: auto;"></svg>
             <div class="explanation">
                 <h3>What's happening here?</h3>
                 <p>We took the SAME 4 yellow triangles and rearranged them inside the SAME big square. Look at <strong>all 4 sides</strong> - they still have segments <strong>a + b</strong> (you can see the "a" and "b" parts labeled on every edge).</p>
@@ -457,68 +578,31 @@
             leftLabelA.textContent = `a`;
             svg1.appendChild(leftLabelA);
             
-            // Right side: show "b" segment (top) and "a" segment (bottom)
-            // Draw bracket for "b" segment on right
-            const rightBracketB1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            rightBracketB1.setAttribute('x1', offsetX + totalSide + 10);
-            rightBracketB1.setAttribute('y1', offsetY);
-            rightBracketB1.setAttribute('x2', offsetX + totalSide + 10);
-            rightBracketB1.setAttribute('y2', offsetY + b * scale);
-            rightBracketB1.setAttribute('stroke', '#666');
-            rightBracketB1.setAttribute('stroke-width', '2');
-            svg1.appendChild(rightBracketB1);
-            
-            const rightTickB1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            rightTickB1.setAttribute('x1', offsetX + totalSide + 5);
-            rightTickB1.setAttribute('y1', offsetY);
-            rightTickB1.setAttribute('x2', offsetX + totalSide + 15);
-            rightTickB1.setAttribute('y2', offsetY);
-            rightTickB1.setAttribute('stroke', '#666');
-            rightTickB1.setAttribute('stroke-width', '2');
-            svg1.appendChild(rightTickB1);
-            
-            const rightTickB2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            rightTickB2.setAttribute('x1', offsetX + totalSide + 5);
-            rightTickB2.setAttribute('y1', offsetY + b * scale);
-            rightTickB2.setAttribute('x2', offsetX + totalSide + 15);
-            rightTickB2.setAttribute('y2', offsetY + b * scale);
-            rightTickB2.setAttribute('stroke', '#666');
-            rightTickB2.setAttribute('stroke-width', '2');
-            svg1.appendChild(rightTickB2);
-            
-            const rightLabelB = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            rightLabelB.setAttribute('class', 'label');
-            rightLabelB.setAttribute('x', offsetX + totalSide + 30);
-            rightLabelB.setAttribute('y', offsetY + (b * scale) / 2 + 5);
-            rightLabelB.setAttribute('text-anchor', 'middle');
-            rightLabelB.setAttribute('fill', '#2196F3');
-            rightLabelB.textContent = `b`;
-            svg1.appendChild(rightLabelB);
-            
+            // Right side: show "a" segment (top) and "b" segment (bottom)
             // Draw bracket for "a" segment on right
             const rightBracketA1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             rightBracketA1.setAttribute('x1', offsetX + totalSide + 10);
-            rightBracketA1.setAttribute('y1', offsetY + b * scale);
+            rightBracketA1.setAttribute('y1', offsetY);
             rightBracketA1.setAttribute('x2', offsetX + totalSide + 10);
-            rightBracketA1.setAttribute('y2', offsetY + totalSide);
+            rightBracketA1.setAttribute('y2', offsetY + a * scale);
             rightBracketA1.setAttribute('stroke', '#666');
             rightBracketA1.setAttribute('stroke-width', '2');
             svg1.appendChild(rightBracketA1);
             
             const rightTickA1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             rightTickA1.setAttribute('x1', offsetX + totalSide + 5);
-            rightTickA1.setAttribute('y1', offsetY + b * scale);
+            rightTickA1.setAttribute('y1', offsetY);
             rightTickA1.setAttribute('x2', offsetX + totalSide + 15);
-            rightTickA1.setAttribute('y2', offsetY + b * scale);
+            rightTickA1.setAttribute('y2', offsetY);
             rightTickA1.setAttribute('stroke', '#666');
             rightTickA1.setAttribute('stroke-width', '2');
             svg1.appendChild(rightTickA1);
             
             const rightTickA2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             rightTickA2.setAttribute('x1', offsetX + totalSide + 5);
-            rightTickA2.setAttribute('y1', offsetY + totalSide);
+            rightTickA2.setAttribute('y1', offsetY + a * scale);
             rightTickA2.setAttribute('x2', offsetX + totalSide + 15);
-            rightTickA2.setAttribute('y2', offsetY + totalSide);
+            rightTickA2.setAttribute('y2', offsetY + a * scale);
             rightTickA2.setAttribute('stroke', '#666');
             rightTickA2.setAttribute('stroke-width', '2');
             svg1.appendChild(rightTickA2);
@@ -526,73 +610,73 @@
             const rightLabelA = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             rightLabelA.setAttribute('class', 'label');
             rightLabelA.setAttribute('x', offsetX + totalSide + 30);
-            rightLabelA.setAttribute('y', offsetY + b * scale + (a * scale) / 2 + 5);
+            rightLabelA.setAttribute('y', offsetY + (a * scale) / 2 + 5);
             rightLabelA.setAttribute('text-anchor', 'middle');
             rightLabelA.setAttribute('fill', '#4CAF50');
             rightLabelA.textContent = `a`;
             svg1.appendChild(rightLabelA);
             
-            // Bottom side: show "a" segment (left) and "b" segment (right)
-            // Draw bracket for "a" segment on bottom
-            const bottomBracketA1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            bottomBracketA1.setAttribute('x1', offsetX);
-            bottomBracketA1.setAttribute('y1', offsetY + totalSide + 10);
-            bottomBracketA1.setAttribute('x2', offsetX + a * scale);
-            bottomBracketA1.setAttribute('y2', offsetY + totalSide + 10);
-            bottomBracketA1.setAttribute('stroke', '#666');
-            bottomBracketA1.setAttribute('stroke-width', '2');
-            svg1.appendChild(bottomBracketA1);
+            // Draw bracket for "b" segment on right
+            const rightBracketB1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            rightBracketB1.setAttribute('x1', offsetX + totalSide + 10);
+            rightBracketB1.setAttribute('y1', offsetY + a * scale);
+            rightBracketB1.setAttribute('x2', offsetX + totalSide + 10);
+            rightBracketB1.setAttribute('y2', offsetY + totalSide);
+            rightBracketB1.setAttribute('stroke', '#666');
+            rightBracketB1.setAttribute('stroke-width', '2');
+            svg1.appendChild(rightBracketB1);
             
-            const bottomTickA1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            bottomTickA1.setAttribute('x1', offsetX);
-            bottomTickA1.setAttribute('y1', offsetY + totalSide + 5);
-            bottomTickA1.setAttribute('x2', offsetX);
-            bottomTickA1.setAttribute('y2', offsetY + totalSide + 15);
-            bottomTickA1.setAttribute('stroke', '#666');
-            bottomTickA1.setAttribute('stroke-width', '2');
-            svg1.appendChild(bottomTickA1);
+            const rightTickB1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            rightTickB1.setAttribute('x1', offsetX + totalSide + 5);
+            rightTickB1.setAttribute('y1', offsetY + a * scale);
+            rightTickB1.setAttribute('x2', offsetX + totalSide + 15);
+            rightTickB1.setAttribute('y2', offsetY + a * scale);
+            rightTickB1.setAttribute('stroke', '#666');
+            rightTickB1.setAttribute('stroke-width', '2');
+            svg1.appendChild(rightTickB1);
             
-            const bottomTickA2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            bottomTickA2.setAttribute('x1', offsetX + a * scale);
-            bottomTickA2.setAttribute('y1', offsetY + totalSide + 5);
-            bottomTickA2.setAttribute('x2', offsetX + a * scale);
-            bottomTickA2.setAttribute('y2', offsetY + totalSide + 15);
-            bottomTickA2.setAttribute('stroke', '#666');
-            bottomTickA2.setAttribute('stroke-width', '2');
-            svg1.appendChild(bottomTickA2);
+            const rightTickB2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            rightTickB2.setAttribute('x1', offsetX + totalSide + 5);
+            rightTickB2.setAttribute('y1', offsetY + totalSide);
+            rightTickB2.setAttribute('x2', offsetX + totalSide + 15);
+            rightTickB2.setAttribute('y2', offsetY + totalSide);
+            rightTickB2.setAttribute('stroke', '#666');
+            rightTickB2.setAttribute('stroke-width', '2');
+            svg1.appendChild(rightTickB2);
             
-            const bottomLabelA = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            bottomLabelA.setAttribute('class', 'label');
-            bottomLabelA.setAttribute('x', offsetX + (a * scale) / 2);
-            bottomLabelA.setAttribute('y', offsetY + totalSide + 30);
-            bottomLabelA.setAttribute('text-anchor', 'middle');
-            bottomLabelA.setAttribute('fill', '#4CAF50');
-            bottomLabelA.textContent = `a`;
-            svg1.appendChild(bottomLabelA);
+            const rightLabelB = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            rightLabelB.setAttribute('class', 'label');
+            rightLabelB.setAttribute('x', offsetX + totalSide + 30);
+            rightLabelB.setAttribute('y', offsetY + a * scale + (b * scale) / 2 + 5);
+            rightLabelB.setAttribute('text-anchor', 'middle');
+            rightLabelB.setAttribute('fill', '#2196F3');
+            rightLabelB.textContent = `b`;
+            svg1.appendChild(rightLabelB);
             
+            // Bottom side: show "b" segment (left) and "a" segment (right)
             // Draw bracket for "b" segment on bottom
             const bottomBracketB1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            bottomBracketB1.setAttribute('x1', offsetX + a * scale);
+            bottomBracketB1.setAttribute('x1', offsetX);
             bottomBracketB1.setAttribute('y1', offsetY + totalSide + 10);
-            bottomBracketB1.setAttribute('x2', offsetX + totalSide);
+            bottomBracketB1.setAttribute('x2', offsetX + b * scale);
             bottomBracketB1.setAttribute('y2', offsetY + totalSide + 10);
             bottomBracketB1.setAttribute('stroke', '#666');
             bottomBracketB1.setAttribute('stroke-width', '2');
             svg1.appendChild(bottomBracketB1);
             
             const bottomTickB1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            bottomTickB1.setAttribute('x1', offsetX + a * scale);
+            bottomTickB1.setAttribute('x1', offsetX);
             bottomTickB1.setAttribute('y1', offsetY + totalSide + 5);
-            bottomTickB1.setAttribute('x2', offsetX + a * scale);
+            bottomTickB1.setAttribute('x2', offsetX);
             bottomTickB1.setAttribute('y2', offsetY + totalSide + 15);
             bottomTickB1.setAttribute('stroke', '#666');
             bottomTickB1.setAttribute('stroke-width', '2');
             svg1.appendChild(bottomTickB1);
             
             const bottomTickB2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            bottomTickB2.setAttribute('x1', offsetX + totalSide);
+            bottomTickB2.setAttribute('x1', offsetX + b * scale);
             bottomTickB2.setAttribute('y1', offsetY + totalSide + 5);
-            bottomTickB2.setAttribute('x2', offsetX + totalSide);
+            bottomTickB2.setAttribute('x2', offsetX + b * scale);
             bottomTickB2.setAttribute('y2', offsetY + totalSide + 15);
             bottomTickB2.setAttribute('stroke', '#666');
             bottomTickB2.setAttribute('stroke-width', '2');
@@ -600,12 +684,49 @@
             
             const bottomLabelB = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             bottomLabelB.setAttribute('class', 'label');
-            bottomLabelB.setAttribute('x', offsetX + a * scale + (b * scale) / 2);
+            bottomLabelB.setAttribute('x', offsetX + (b * scale) / 2);
             bottomLabelB.setAttribute('y', offsetY + totalSide + 30);
             bottomLabelB.setAttribute('text-anchor', 'middle');
             bottomLabelB.setAttribute('fill', '#2196F3');
             bottomLabelB.textContent = `b`;
             svg1.appendChild(bottomLabelB);
+            
+            // Draw bracket for "a" segment on bottom
+            const bottomBracketA1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            bottomBracketA1.setAttribute('x1', offsetX + b * scale);
+            bottomBracketA1.setAttribute('y1', offsetY + totalSide + 10);
+            bottomBracketA1.setAttribute('x2', offsetX + totalSide);
+            bottomBracketA1.setAttribute('y2', offsetY + totalSide + 10);
+            bottomBracketA1.setAttribute('stroke', '#666');
+            bottomBracketA1.setAttribute('stroke-width', '2');
+            svg1.appendChild(bottomBracketA1);
+            
+            const bottomTickA1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            bottomTickA1.setAttribute('x1', offsetX + b * scale);
+            bottomTickA1.setAttribute('y1', offsetY + totalSide + 5);
+            bottomTickA1.setAttribute('x2', offsetX + b * scale);
+            bottomTickA1.setAttribute('y2', offsetY + totalSide + 15);
+            bottomTickA1.setAttribute('stroke', '#666');
+            bottomTickA1.setAttribute('stroke-width', '2');
+            svg1.appendChild(bottomTickA1);
+            
+            const bottomTickA2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            bottomTickA2.setAttribute('x1', offsetX + totalSide);
+            bottomTickA2.setAttribute('y1', offsetY + totalSide + 5);
+            bottomTickA2.setAttribute('x2', offsetX + totalSide);
+            bottomTickA2.setAttribute('y2', offsetY + totalSide + 15);
+            bottomTickA2.setAttribute('stroke', '#666');
+            bottomTickA2.setAttribute('stroke-width', '2');
+            svg1.appendChild(bottomTickA2);
+            
+            const bottomLabelA = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            bottomLabelA.setAttribute('class', 'label');
+            bottomLabelA.setAttribute('x', offsetX + b * scale + (a * scale) / 2);
+            bottomLabelA.setAttribute('y', offsetY + totalSide + 30);
+            bottomLabelA.setAttribute('text-anchor', 'middle');
+            bottomLabelA.setAttribute('fill', '#4CAF50');
+            bottomLabelA.textContent = `a`;
+            svg1.appendChild(bottomLabelA);
             
             // Add c label on the tilted square
             const cLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
